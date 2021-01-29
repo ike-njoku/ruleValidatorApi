@@ -12,7 +12,7 @@ router.get('/', (request, response)=>{
         "message": "My Rule-Validation API",
         "status": "success",
         "data":{
-        "name": "Ike-Njoku David",
+        "name": "Ike-Njoku David Chukwunweike",
         "github": "@ike-njoku",
         "email": "ikenjokudc@gmail.com",
         "mobile": "07038792802",
@@ -25,6 +25,7 @@ router.get('/', (request, response)=>{
 // POST
 // validate the request using the rule validator middlware
 router.post('/validate-rule',ruleValidator, (request, response)=>{
+    
 
 });
 
