@@ -1,9 +1,9 @@
 // import express
 const express = require('express');
 const router = express.Router();
-// import the validator
-const ruleValidator = require('../../middleware/ruleValidator.middleware');
-
+// import rule validator
+const RuleValidator = require('../../services/ruleValidator.service');
+const ruleValidator = new RuleValidator();
 
 // GET ( get my data)
 router.get('/', (request, response)=>{
@@ -18,14 +18,28 @@ router.get('/', (request, response)=>{
         "mobile": "07038792802",
         "twitter": "@ikenjoku_david"}
       })
-
-
 });
 
 // POST
 // validate the request using the rule validator middlware
-router.post('/validate-rule',ruleValidator, (request, response)=>{
-    
+router.post('/validate-rule',(request, response) => {
+    // if validation == true, return the response body
+    let validation = true;
+    // check for the presence of the rule field
+    if(ruleValidator.checkRuleFieldPresence(request.body) == false){ response.status(400).json({
+        "message": "rule is required.",
+        "status": "error",
+        "data": null
+    }) ; validation = false ;}
+
+    // check the type for the rulefield passed in the payload
+    if(ruleValidator.checkRuleFieldType(request.body.rule) == false){response.status(400).json({
+        "message": "rule should be an object.",
+        "status": "error",
+        "data": null
+    }); validation = false; }
+
+    if(validation == true)response.json(request.body);
 
 });
 
