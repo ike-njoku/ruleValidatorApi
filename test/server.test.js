@@ -266,7 +266,6 @@ describe('POST /validate-rule - rule field is absent in data', () => {
       .expect('Content-Type', /json/)
       .expect(400, expectedResponse, done);
 
-
   });
 
   it('should return an error if nested rule field is absent in data', (done) => {
@@ -302,12 +301,97 @@ describe('POST /validate-rule - rule field is absent in data', () => {
       .expect('Content-Type', /json/)
       .expect(400, expectedResponse, done);
 
-
   });
-
-
 });
 
 
+describe('POST /validate-rule  - check if rule validation is successful ', () => {
 
+  it('should return a status of 200 if the rule validation is successful', (done) => {
+
+      const payLoad = {
+        "rule": {
+          "field": "missions",
+          "condition": "gte",
+          "condition_value": 30
+        },
+        "data": {
+          "name": "James Holden",
+          "crew": "Rocinante",
+          "age": 34,
+          "position": "Captain",
+          "missions": 30
+        }
+
+    };
+
+    const expectedResponse = {
+        "message": "field missions successfully validated.",
+        "status": "success",
+        "data": {
+          "validation": {
+            "error": false,
+            "field": "missions",
+            "field_value": 30,
+            "condition": "gte",
+            "condition_value": 30
+          }
+      }
+    };
+
+    request(app)
+      .post('/validate-rule')
+      .set('Accept', 'application/json')
+      .send(payLoad)
+      .expect('Content-Type', /json/)
+      .expect(200, expectedResponse, done);
+
+  });
+
+});
+
+describe('POST /validate-rule  - check if rule validation is unsuccessful ', () => {
+
+  it('should return an appropriate message if rule validation is unsuccessful', (done) => {
+
+      const payLoad = {
+        "rule": {
+          "field": "missions",
+          "condition": "gte",
+          "condition_value": 54
+        },
+        "data": {
+          "name": "James Holden",
+          "crew": "Rocinante",
+          "age": 34,
+          "position": "Captain",
+          "missions": 30
+        }
+
+    };
+
+    const expectedResponse = {
+        "message": "field missions failed validation.",
+        "status": "error",
+        "data": {
+          "validation": {
+            "error": true,
+            "field": "missions",
+            "field_value": 30,
+            "condition": "gte",
+            "condition_value": 54
+          }
+        }
+    };
+
+    request(app)
+      .post('/validate-rule')
+      .set('Accept', 'application/json')
+      .send(payLoad)
+      .expect('Content-Type', /json/)
+      .expect(400, expectedResponse, done);
+
+  });
+
+});
 

@@ -10,8 +10,6 @@ class DataValidator{
     // checking typeof for data field
     checkDataFieldType(dataField) {
         const dataFieldType = typeof dataField;
-        console.log(dataFieldType);
-
         const expectedTypes = ['object', 'string'];
         if (!expectedTypes.includes(dataFieldType)) return false;
     }
@@ -28,6 +26,21 @@ class DataValidator{
             currentChildIndex++;
             currentObject = currentObject[currentChild];
         }
+    }
+
+    // get field value
+    getFieldValue(fieldName, data) {
+        const children = fieldName.split('.');
+        let currentChildIndex = 0;
+        let currentChild = children[currentChildIndex];
+        let currentObject = data;
+        while(currentChildIndex < children.length) {
+            currentChild = children[currentChildIndex];
+            if (!(currentChild in currentObject)) return null;
+            currentChildIndex++;
+            currentObject = currentObject[currentChild];
+        }
+        return currentObject;
     }
 }
 
