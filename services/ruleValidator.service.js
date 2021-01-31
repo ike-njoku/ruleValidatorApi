@@ -1,21 +1,35 @@
  class RuleValidator {
 
+
     // check for the presence of the rule field
-    checkRuleFieldPresence(body){
-        console.log('...checking if the rule field is present')
-        if(!body.rule){console.error(" >>> the rule field is not present"); return false;}else{
-            console.log(' >>> rule field is present');
-        }
+    checkRuleFieldPresence(body) {
+        if(!body.rule) return false;
     }
 
     // check for the data type passed as the rule field (should be an object)
-    checkRuleFieldType(ruleField){
+    checkRuleFieldType(ruleField) {
         const ruleFieldType = typeof ruleField;
-        console.log('...checking rule field type');
-        if(ruleFieldType !== 'object'){console.error(` >>> expected rule field to be of type object, but got ${ruleFieldType} `); return false}else{
-            console.log(' >>> rule field type checked');
-        }
+        if (ruleFieldType !== 'object') return false;
+
+        if (Array.isArray(ruleField)) return false;
+
+        if (ruleField == null) return false;
+    };
+
+
+    // -------------------------------   check rule field payload validity
+    checkAllRuleFields(ruleField){
+        if(ruleField.length < 3)return false;
+        
+        // refactor this portion later
+        if(!ruleField.field || ruleField.field =='') return false;
+
+        if(!ruleField.condition || ruleField.condition =='') return false;
+
+        if(!ruleField.condition_value || ruleField.condition_value =='') return false;
+        
     }
+
 
 
 }
